@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="munit-test-demo-test-suite.xml" />
+	<munit:test name="munit-test-demo-test-suite-munit-test-demoFlowTest" doc:id="283bf6ff-322f-46d2-bff3-362bf3e01a47" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="52fafa7a-8114-4586-a47d-32a419aea4c3" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5c91d2fa-7ef1-485f-b633-6dda32e4cf88" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[write(readUrl('classpath://sample-data/mocksample.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[output application/java --- {'statusCode': '200'}]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d10029b9-6422-46c4-ba06-301a1032138e" >
+				<munit:payload value="#[write(readUrl('classpath://sample-data/mocksample.dwl'), &quot;application/json&quot;)]" encoding="UTF-8" mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to munit-test-demoFlow" doc:id="f5c552fb-bd91-49c1-9c8e-5065ab7b7e20" name="munit-test-demoFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="281e7012-82f1-4710-bcf6-d41976f30f35" is='#[MunitTools::equalTo("200")]' expression="#[attributes.statusCode]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="2c392ac5-edb0-47b0-a4dc-e377c2a3b990" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

@@ -15,7 +15,7 @@
 					<munit-tools:with-attribute whereValue="5c91d2fa-7ef1-485f-b633-6dda32e4cf88" attributeName="doc:id" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
-					<munit-tools:payload value="#[write(readUrl('classpath://sample-data/mocksample.dwl'), &quot;application/json&quot;)]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('sample-data/samplefile.json')]" mediaType="application/json" encoding="UTF-8" />
 					<munit-tools:attributes value="#[output application/java --- {'statusCode': '200'}]" />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
